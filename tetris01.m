@@ -1,7 +1,7 @@
 % define shapes
 clear; close all; 
 global get_to_the_bottom key_pertect map current_x current_y map_base current_shape ...
-   current_shape_direction current_shape_num shapes dropSpeed width height
+   current_shape_direction current_shape_num shapes dropSpeed width height pause_en htext2
 shapes = zeros(4,4,7,4);
 %------------ direction 1  --------------
 shapes(1:2,:,1,1) =  [[1,1,1,1]; 
@@ -115,13 +115,23 @@ map = zeros(height,width);
 map_base = zeros(height,width);
 get_to_the_bottom = 1;
 dropSpeed = 0.5;
+pause_en = 0;
+screenScale = 2;
 
 colormap([0,0,0;0.5,0.5,0.8]);
 % map(1:3,:) = 2;
-image(map+1);
-axis equal
-axis off
 set(gcf, 'name', 'Tetris', 'menubar', 'none', 'numbertitle', 'off', 'KeyPressFcn', @keypress)
+set(gcf, 'unit', 'centimeters', 'position', [30 5 7.5*screenScale 10*screenScale],'Resize','off');
+
+
+set(gca,'Position', [.1 .05 .6 .9]);
+image(map+1);
+axis off
+
+player_score = 0;
+htext = uicontrol('Style','text','String',['Score: ',num2str(player_score)],'Units','normalized', 'Position',[.75 .05 .2 .1]);
+htext2 = uicontrol('Style','text','String','Playing','Units','normalized', 'Position',[.75 .2 .2 .1]);
+
 key_pertect = 1;
 % set(gca,'position',[-0.4,-0.3,1.8,1.6]);
 
@@ -145,27 +155,31 @@ while true
             fprintf("Game Over!\n");
             break;
         else % block move to the bottom
-            [map_base, map] = rm_row(width, height, map);
-            image(map+1),axis equal off;  % plot the map          
+            [map_base, map, player_score] = rm_row(width, height, map, player_score);
+            image(map+1),axis off;  % plot the map
+            set(htext,'String',['Score: ',num2str(player_score)]);
             pause(dropSpeed);
             [current_shape_num, current_shape_direction, current_shape, current_x, current_y, dropSpeed] = ...
                 selet_a_new_shape(shapes, width);
             
         end
     else
-        image(map+1),axis equal off;  % plot the map
+        image(map+1),axis off;  % plot the map
         key_pertect = 0;
         pause(dropSpeed);  % pause the block half second
+        while pause_en
+            pause(1);
+        end
         key_pertect = 1;        
     end
 end
 
 function keypress(~, evt)
 global get_to_the_bottom key_pertect map map_base current_x current_y current_shape...
-    current_shape_num current_shape_direction shapes dropSpeed width height
+    current_shape_num current_shape_direction shapes dropSpeed width pause_en htext2
 if key_pertect == 0
     switch evt.Key
-        case 'leftarrow'
+        case {'leftarrow','a'}
             if current_x > 1  
                 map_test = map_base;
                 [shapeRowBeginTest,shapeRowEndTest,shapeColBeginTest,shapeColEndTest] = get_shape_bound(current_shape);
@@ -175,10 +189,10 @@ if key_pertect == 0
                 if sum(map_test(:) == 2) == 0 
                     current_x = current_x - 1;
                     map = map_test;
-                    image(map+1),axis equal off;
+                    image(map+1),axis off;
                 end
             end
-        case 'rightarrow'
+        case {'rightarrow','d'}
             [shapeRowBegin,shapeRowEnd,shapeColBegin,shapeColEnd] = get_shape_bound(current_shape);
             if current_x < 10 - (shapeColEnd-shapeColBegin) 
                 map_test = map_base;
@@ -190,12 +204,12 @@ if key_pertect == 0
     
                     current_x = current_x + 1;
                     map = map_test;
-                    image(map+1),axis equal off;
+                    image(map+1),axis off;
                 end
             end
-        case 'downarrow'
+        case {'downarrow','space','s'}
              dropSpeed = 0.05;
-        case 'uparrow'
+        case {'uparrow','w'}
             map_test = map_base;
             current_shape_test = shapes(:,:,current_shape_num,mod(current_shape_direction,4)+1);
             [shapeRowBeginTest,shapeRowEndTest,shapeColBeginTest,shapeColEndTest] = get_shape_bound(current_shape_test);
@@ -213,7 +227,14 @@ if key_pertect == 0
                 current_shape_direction = mod(current_shape_direction,4)+1;
                 map = map_test;
                 current_x = current_x_test;
-                image(map+1),axis equal off;
+                image(map+1),axis off;
+            end
+        case 'p'
+            pause_en = mod(pause_en + 1,2);
+            if pause_en == 1
+                set(htext2,'String','Paused');
+            else
+                set(htext2,'String','Playing');
             end
     end
 end
@@ -242,12 +263,14 @@ function [get_to_the_bottom,map,y]=block_move_down(map_base, current_shape, curr
     
 end
 
-function [map_base, map_update] = rm_row(width, height, map)
+function [map_base, map_update, score_update] = rm_row(width, height, map, score)
     % if a line full, delete the line
     map_update = map;
+    score_update = score;
     for i = 1:height
         if sum(map_update(i, :)) == width
             map_update = [zeros(1, width); map_update([1:i-1,i+1:height],:)];
+            score_update = score_update + 1;
         end
     end
     map_base = map_update;
