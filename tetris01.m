@@ -1,6 +1,6 @@
 % define shapes
 clear; close all; 
-global get_to_the_bottom key_pertect map current_x current_y map_base current_shape ...
+global key_pertect map current_x current_y map_base current_shape ...
    current_shape_direction current_shape_num shapes dropSpeed width height pause_en htext2
 shapes = zeros(4,4,7,4);
 %------------ direction 1  --------------
@@ -121,7 +121,7 @@ screenScale = 2;
 colormap([0,0,0;0.5,0.5,0.8]);
 % map(1:3,:) = 2;
 set(gcf, 'name', 'Tetris', 'menubar', 'none', 'numbertitle', 'off', 'KeyPressFcn', @keypress)
-set(gcf, 'unit', 'centimeters', 'position', [30 5 7.5*screenScale 10*screenScale],'Resize','off');
+set(gcf, 'unit', 'centimeters', 'position', [30/screenScale 5/screenScale 7.5*screenScale 10*screenScale],'Resize','off');
 
 
 set(gca,'Position', [.1 .05 .6 .9]);
@@ -175,7 +175,7 @@ while true
 end
 
 function keypress(~, evt)
-global get_to_the_bottom key_pertect map map_base current_x current_y current_shape...
+global key_pertect map map_base current_x current_y current_shape...
     current_shape_num current_shape_direction shapes dropSpeed width pause_en htext2
 if key_pertect == 0
     switch evt.Key
@@ -183,8 +183,9 @@ if key_pertect == 0
             if current_x > 1  
                 map_test = map_base;
                 [shapeRowBeginTest,shapeRowEndTest,shapeColBeginTest,shapeColEndTest] = get_shape_bound(current_shape);
-                map_test(current_y+shapeRowBeginTest:current_y+shapeRowEndTest,current_x+shapeColBeginTest-1-1:current_x+shapeColEndTest-1-1) = ...
-                    map_test(current_y+shapeRowBeginTest:current_y+shapeRowEndTest,current_x+shapeColBeginTest-1-1:current_x+shapeColEndTest-1-1) + ...
+
+                map_test(current_y+shapeRowBeginTest-1:current_y+shapeRowEndTest-1,current_x+shapeColBeginTest-1-1:current_x+shapeColEndTest-1-1) = ...
+                    map_test(current_y+shapeRowBeginTest-1:current_y+shapeRowEndTest-1,current_x+shapeColBeginTest-1-1:current_x+shapeColEndTest-1-1) + ...
                     current_shape(shapeRowBeginTest:shapeRowEndTest,shapeColBeginTest:shapeColEndTest);
                 if sum(map_test(:) == 2) == 0 
                     current_x = current_x - 1;
@@ -197,8 +198,8 @@ if key_pertect == 0
             if current_x < 10 - (shapeColEnd-shapeColBegin) 
                 map_test = map_base;
                 
-                map_test(current_y+shapeRowBegin:current_y+shapeRowEnd,current_x+shapeColBegin-1+1:current_x+shapeColEnd-1+1) = ...
-                    map_test(current_y+shapeRowBegin:current_y+shapeRowEnd,current_x+shapeColBegin-1+1:current_x+shapeColEnd-1+1) + ...
+                map_test(current_y+shapeRowBegin-1:current_y+shapeRowEnd-1,current_x+shapeColBegin-1+1:current_x+shapeColEnd-1+1) = ...
+                    map_test(current_y+shapeRowBegin-1:current_y+shapeRowEnd-1,current_x+shapeColBegin-1+1:current_x+shapeColEnd-1+1) + ...
                     current_shape(shapeRowBegin:shapeRowEnd,shapeColBegin:shapeColEnd);
                 if sum(map_test(:) == 2) == 0                
     
@@ -219,8 +220,8 @@ if key_pertect == 0
                 current_x_test = current_x_test - 1;
             end
 
-            map_test(current_y+shapeRowBeginTest:current_y+shapeRowEndTest,current_x_test+shapeColBeginTest-1:current_x_test+shapeColEndTest-1) = ...
-                map_test(current_y+shapeRowBeginTest:current_y+shapeRowEndTest,current_x_test+shapeColBeginTest-1:current_x_test+shapeColEndTest-1) + ...
+            map_test(current_y+shapeRowBeginTest-1:current_y+shapeRowEndTest-1,current_x_test+shapeColBeginTest-1:current_x_test+shapeColEndTest-1) = ...
+                map_test(current_y+shapeRowBeginTest-1:current_y+shapeRowEndTest-1,current_x_test+shapeColBeginTest-1:current_x_test+shapeColEndTest-1) + ...
                 current_shape_test(shapeRowBeginTest:shapeRowEndTest,shapeColBeginTest:shapeColEndTest);
             if sum(map_test(:) == 2) == 0               
                 current_shape = current_shape_test;
