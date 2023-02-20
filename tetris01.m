@@ -1,30 +1,45 @@
 % define shapes
 clear; close all; 
-global key_pertect map current_x current_y map_base current_shape ...
+global key_pertect map current_x current_y map_base current_shape ax1...
    current_shape_direction current_shape_num shapes dropSpeed width height pause_en htext2
+
 shapes = zeros(4,4,7,4);
 %------------ direction 1  --------------
-shapes(1:2,:,1,1) =  [[1,1,1,1]; 
-                      [0,0,0,0]]; % I
-shapes(1:2,:,2,1) =  [[1,1,1,0]; 
-                      [1,0,0,0]]; % L
-shapes(1:2,:,3,1) =  [[1,1,1,0]; 
-                      [0,0,1,0]]; % flip L
-shapes(1:2,:,4,1) =   [[1,1,0,0]; 
-                       [1,1,0,0]]; % brick
-shapes(1:2,:,5,1) =   [[1,1,0,0]; 
-                       [0,1,1,0]]; % Z
-shapes(1:2,:,6,1) =   [[0,1,1,0]; 
-                       [1,1,0,0]]; % flip Z
-shapes(1:2,:,7,1) =  [[0,1,0,0]; 
-                      [1,1,1,0]]; %  T
+shapes(:,:,1,1) =  [[0,0,0,0];
+                    [1,1,1,1];
+                    [0,0,0,0];
+                    [0,0,0,0]]; % I
+shapes(:,:,2,1) =  [[0,0,0,0];
+                    [1,1,1,0]; 
+                    [1,0,0,0];
+                    [0,0,0,0]]; % L
+shapes(:,:,3,1) =  [[0,0,0,0];
+                    [1,1,1,0]; 
+                    [0,0,1,0];
+                    [0,0,0,0]]; % flip L
+shapes(:,:,4,1) =  [[0,0,0,0];
+                    [0,1,1,0]; 
+                    [0,1,1,0];
+                    [0,0,0,0]]; % brick
+shapes(:,:,5,1) =  [[0,0,0,0];
+                    [1,1,0,0]; 
+                    [0,1,1,0];
+                    [0,0,0,0]]; % Z
+shapes(:,:,6,1) =  [[0,0,0,0];
+                    [0,1,1,0]; 
+                    [1,1,0,0];
+                    [0,0,0,0]]; % flip Z
+shapes(:,:,7,1) =  [[0,0,0,0];
+                    [0,1,0,0]; 
+                    [1,1,1,0];
+                    [0,0,0,0]]; %  T
 
 %------------- direction 2  --------------
 
-shapes(:,:,1,2) =    [[1,0,0,0]; 
-                      [1,0,0,0];
-                      [1,0,0,0];
-                      [1,0,0,0];]; % I
+shapes(:,:,1,2) =    [[0,1,0,0]; 
+                      [0,1,0,0];
+                      [0,1,0,0];
+                      [0,1,0,0];]; % I
 shapes(:,:,2,2) =    [[1,1,0,0]; 
                       [0,1,0,0];
                       [0,1,0,0];
@@ -33,56 +48,60 @@ shapes(:,:,3,2) =    [[0,1,0,0];
                       [0,1,0,0];
                       [1,1,0,0];
                       [0,0,0,0]]; % flip L
-shapes(1:2,:,4,2) =   [[1,1,0,0]; 
-                       [1,1,0,0]]; % brick
-shapes(:,:,5,2) =     [[0,1,0,0]; 
+shapes(:,:,4,2) =   [ [0,0,0,0];
+                      [0,1,1,0]; 
+                      [0,1,1,0];
+                      [0,0,0,0];]; % brick
+shapes(:,:,5,2) =    [ [0,1,0,0]; 
                        [1,1,0,0];
                        [1,0,0,0];
                        [0,0,0,0]]; % Z
-shapes(:,:,6,2) =     [[1,0,0,0]; 
-                       [1,1,0,0];
-                       [0,1,0,0];
+shapes(:,:,6,2) =     [[0,1,0,0]; 
+                       [0,1,1,0];
+                       [0,0,1,0];
                        [0,0,0,0]]; % flip Z
-shapes(:,:,7,2) =    [[1,0,0,0]; 
-                      [1,1,0,0];
-                      [1,0,0,0];
+shapes(:,:,7,2) =    [[0,1,0,0]; 
+                      [0,1,1,0];
+                      [0,1,0,0];
                       [0,0,0,0]]; %  T
 
 %------------- direction 3  --------------
 
-shapes(:,:,1,3) =    [[1,1,1,1]; 
+shapes(:,:,1,3) =    [[0,0,0,0];
+                      [1,1,1,1];                      
                       [0,0,0,0];
-                      [0,0,0,0];
-                      [0,0,0,0];]; % I
+                      [0,0,0,0]]; % I
 shapes(:,:,2,3) =    [[0,0,1,0]; 
                       [1,1,1,0];
                       [0,0,0,0];
-                      [0,0,0,0];]; % L
+                      [0,0,0,0]]; % L
 shapes(:,:,3,3) =    [[1,0,0,0]; 
                       [1,1,1,0];
                       [0,0,0,0];
                       [0,0,0,0]]; % flip L
-shapes(1:2,:,4,3) =   [[1,1,0,0]; 
-                       [1,1,0,0]]; % brick
-shapes(:,:,5,3) =     [[1,1,0,0]; 
-                       [0,1,1,0];
-                       [0,0,0,0];
+shapes(:,:,4,3) =     [[0,0,0,0];
+                       [0,1,1,0]; 
+                       [0,1,1,0]
+                       [0,0,0,0]]; % brick
+shapes(:,:,5,3) =     [[0,0,0,0];
+                       [1,1,0,0]; 
+                       [0,1,1,0];                       
                        [0,0,0,0]]; % Z
-shapes(:,:,6,3) =     [[0,1,1,0]; 
+shapes(:,:,6,3) =     [[0,0,0,0];
+                       [0,1,1,0]; 
                        [1,1,0,0];
-                       [0,0,0,0];
                        [0,0,0,0]]; % flip Z
-shapes(:,:,7,3) =    [[1,1,1,0]; 
-                      [0,1,0,0];
-                      [0,0,0,0];
-                      [0,0,0,0]]; %  T
+shapes(:,:,7,3) =     [[0,0,0,0]
+                       [1,1,1,0]; 
+                       [0,1,0,0];
+                       [0,0,0,0]]; %  T
 
 %------------- direction 4  --------------
 
-shapes(:,:,1,4) =    [[1,0,0,0]; 
-                      [1,0,0,0];
-                      [1,0,0,0];
-                      [1,0,0,0];]; % I
+shapes(:,:,1,4) =    [[0,1,0,0]; 
+                      [0,1,0,0];
+                      [0,1,0,0];
+                      [0,1,0,0];]; % I
 shapes(:,:,2,4) =    [[1,0,0,0]; 
                       [1,0,0,0];
                       [1,1,0,0];
@@ -91,20 +110,24 @@ shapes(:,:,3,4) =    [[1,1,0,0];
                       [1,0,0,0];
                       [1,0,0,0];
                       [0,0,0,0]]; % flip L
-shapes(1:2,:,4,4) =   [[1,1,0,0]; 
-                       [1,1,0,0]]; % brick
-shapes(:,:,5,4) =     [[0,1,0,0]; 
-                       [1,1,0,0];
-                       [1,0,0,0];
-                       [0,0,0,0]]; % Z
-shapes(:,:,6,4) =     [[1,0,0,0]; 
-                       [1,1,0,0];
-                       [0,1,0,0];
-                       [0,0,0,0]]; % flip Z
+shapes(:,:,4,4) =    [[0,0,0,0];
+                      [0,1,1,0]; 
+                      [0,1,1,0];
+                      [0,0,0,0]]; % brick
+shapes(:,:,5,4) =    [[0,1,0,0]; 
+                      [1,1,0,0];
+                      [1,0,0,0];
+                      [0,0,0,0]]; % Z
+shapes(:,:,6,4) =    [[0,1,0,0]; 
+                      [0,1,1,0];
+                      [0,0,1,0];
+                      [0,0,0,0]]; % flip Z
 shapes(:,:,7,4) =    [[0,1,0,0]; 
                       [1,1,0,0];
                       [0,1,0,0];
                       [0,0,0,0]]; %  T
+
+
 
 % define game size
 width = 10;
@@ -123,10 +146,9 @@ colormap([0,0,0;0.5,0.5,0.8]);
 set(gcf, 'name', 'Tetris', 'menubar', 'none', 'numbertitle', 'off', 'KeyPressFcn', @keypress)
 set(gcf, 'unit', 'centimeters', 'position', [30/screenScale 5/screenScale 7.5*screenScale 10*screenScale],'Resize','off');
 
+ax1 = subplot('Position', [.1 .05 .6 .9]); 
+image(ax1,map+1); axis off;
 
-set(gca,'Position', [.1 .05 .6 .9]);
-image(map+1);
-axis off
 
 player_score = 0;
 htext = uicontrol('Style','text','String',['Score: ',num2str(player_score)],'Units','normalized', 'Position',[.75 .05 .2 .1]);
@@ -139,10 +161,13 @@ key_pertect = 1;
 current_shape_num = randi([1, 7]);
 current_shape_direction = 1;
 current_shape = shapes(:,:,current_shape_num,current_shape_direction);
-
+ax2 = subplot('Position', [.75 .7 .2 .15]);
+next_shape_num = randi([1, 7]);
+next_shape = shapes(:,:,next_shape_num,current_shape_direction);
+image(ax2,next_shape+1); axis off;
 
 % get initial position
-current_x = ceil(width / 2);
+current_x = ceil(width / 2)-1;
 current_y = 0;
 
 % update figure
@@ -156,15 +181,18 @@ while true
             break;
         else % block move to the bottom
             [map_base, map, player_score] = rm_row(width, height, map, player_score);
-            image(map+1),axis off;  % plot the map
+            image(ax1,map+1),axis off;  % plot the map
             set(htext,'String',['Score: ',num2str(player_score)]);
             pause(dropSpeed);
-            [current_shape_num, current_shape_direction, current_shape, current_x, current_y, dropSpeed] = ...
-                selet_a_new_shape(shapes, width);
+            [current_shape_num, current_shape_direction, current_shape, next_shape_num, next_shape, current_x, current_y, dropSpeed] = ...
+                selet_a_new_shape(shapes, width, next_shape_num);
             
         end
     else
-        image(map+1),axis off;  % plot the map
+        image(ax1,map+1),axis off;  % plot the map
+        if current_y == 1
+            image(ax2,next_shape+1),axis off; 
+        end
         key_pertect = 0;
         pause(dropSpeed);  % pause the block half second
         while pause_en
@@ -175,14 +203,15 @@ while true
 end
 
 function keypress(~, evt)
-global key_pertect map map_base current_x current_y current_shape...
+global key_pertect map map_base current_x current_y current_shape ax1...
     current_shape_num current_shape_direction shapes dropSpeed width pause_en htext2
 if key_pertect == 0
     switch evt.Key
         case {'leftarrow','a'}
-            if current_x > 1  
+            [shapeRowBeginTest,shapeRowEndTest,shapeColBeginTest,shapeColEndTest] = get_shape_bound(current_shape);
+            if current_x + shapeColBeginTest-1> 1  
                 map_test = map_base;
-                [shapeRowBeginTest,shapeRowEndTest,shapeColBeginTest,shapeColEndTest] = get_shape_bound(current_shape);
+                
 
                 map_test(current_y+shapeRowBeginTest-1:current_y+shapeRowEndTest-1,current_x+shapeColBeginTest-1-1:current_x+shapeColEndTest-1-1) = ...
                     map_test(current_y+shapeRowBeginTest-1:current_y+shapeRowEndTest-1,current_x+shapeColBeginTest-1-1:current_x+shapeColEndTest-1-1) + ...
@@ -190,12 +219,12 @@ if key_pertect == 0
                 if sum(map_test(:) == 2) == 0 
                     current_x = current_x - 1;
                     map = map_test;
-                    image(map+1),axis off;
+                    image(ax1,map+1),axis off;
                 end
             end
         case {'rightarrow','d'}
             [shapeRowBegin,shapeRowEnd,shapeColBegin,shapeColEnd] = get_shape_bound(current_shape);
-            if current_x < 10 - (shapeColEnd-shapeColBegin) 
+            if current_x + (shapeColEnd-1) < width 
                 map_test = map_base;
                 
                 map_test(current_y+shapeRowBegin-1:current_y+shapeRowEnd-1,current_x+shapeColBegin-1+1:current_x+shapeColEnd-1+1) = ...
@@ -205,7 +234,7 @@ if key_pertect == 0
     
                     current_x = current_x + 1;
                     map = map_test;
-                    image(map+1),axis off;
+                    image(ax1,map+1),axis off;
                 end
             end
         case {'downarrow','space','s'}
@@ -219,6 +248,9 @@ if key_pertect == 0
             while current_x_test+shapeColEndTest-1 > width
                 current_x_test = current_x_test - 1;
             end
+            while current_x_test+shapeColBeginTest-1 < 1
+                current_x_test = current_x_test + 1;
+            end
 
             map_test(current_y+shapeRowBeginTest-1:current_y+shapeRowEndTest-1,current_x_test+shapeColBeginTest-1:current_x_test+shapeColEndTest-1) = ...
                 map_test(current_y+shapeRowBeginTest-1:current_y+shapeRowEndTest-1,current_x_test+shapeColBeginTest-1:current_x_test+shapeColEndTest-1) + ...
@@ -228,7 +260,7 @@ if key_pertect == 0
                 current_shape_direction = mod(current_shape_direction,4)+1;
                 map = map_test;
                 current_x = current_x_test;
-                image(map+1),axis off;
+                image(ax1,map+1),axis off;
             end
         case 'p'
             pause_en = mod(pause_en + 1,2);
@@ -259,9 +291,7 @@ function [get_to_the_bottom,map,y]=block_move_down(map_base, current_shape, curr
             y = current_y + 1; % next y to try
             get_to_the_bottom = 0;
         end
-    end
-
-    
+    end    
 end
 
 function [map_base, map_update, score_update] = rm_row(width, height, map, score)
@@ -277,12 +307,15 @@ function [map_base, map_update, score_update] = rm_row(width, height, map, score
     map_base = map_update;
 end
 
-function [current_shape_num, current_shape_direction, current_shape, current_x, current_y, dropSpeed] = ...
-    selet_a_new_shape(shapes, width)
+function [current_shape_num, current_shape_direction, current_shape, next_shape_num, next_shape, current_x, current_y, dropSpeed] = ...
+    selet_a_new_shape(shapes, width, next_num)
 
-    current_shape_num = randi([1, 7]);
+    current_shape_num = next_num;
+    
     current_shape_direction = 1;
     current_shape = shapes(:,:,current_shape_num,current_shape_direction);
+    next_shape_num = randi([1, 7]);
+    next_shape = shapes(:,:,next_shape_num,current_shape_direction);
     current_x = ceil(width / 2)-1;
     current_y = 0;
     dropSpeed = 0.5;
